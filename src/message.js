@@ -129,9 +129,11 @@ export async function MessagesUpsert(axmisu, upsert) {
     const owner = isOwner(m.sender, botNumber);
 
     // Terminal shortcut: ketik "$<perintah>" (misal $ls -la) buat jalanin shell langsung.
-    // Khusus owner, ga lewat sistem command/prefix biasa.
+    // Khusus owner, dan cuma nyala kalau global.enableShellExec = true di settings.js
+    // (default OFF karena ini pada dasarnya RCE ke server tempat bot jalan).
     const rawBody = (m.body || '').trim();
     if (owner && rawBody.startsWith('$') && rawBody.length > 1) {
+      if (!global.enableShellExec) return m.reply(global.mess.featureDisabled);
       const cmd = rawBody.slice(1).trim();
       if (!cmd) return;
 
