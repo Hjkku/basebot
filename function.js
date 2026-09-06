@@ -24,8 +24,17 @@ import webp from 'node-webpmux';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
-// Jalanin perintah shell/terminal, dipakai fitur "$" dan command .run
-export const execShell = promisify(exec);
+const execAsync = promisify(exec);
+
+// Jalanin perintah shell/terminal, dipakai fitur "$".
+// Dikasih timeout & batas output biar command yang nge-hang atau
+// keluarannya kegedean ga bikin proses bot nyangkut/kehabisan memory.
+export const execShell = (cmd, opts = {}) =>
+  execAsync(cmd, {
+    timeout: 60_000,        // 60 detik, command lebih lama dari ini otomatis di-kill
+    maxBuffer: 5 * 1024 * 1024, // cap 5MB biar output raksasa ga bikin OOM
+    ...opts,
+  });
 
 // Download apapun dari url jadi Buffer
 export const getBuffer = async (url) => {

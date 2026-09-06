@@ -1,56 +1,100 @@
-## Information
-
 <div align="center">
-<a href="https://github.com/Hjkku/basebot/watchers"><img title="Watchers" src="https://img.shields.io/github/watchers/Hjkku/basebot?label=Watchers&color=green&style=flat-square"></a>
-<a href="https://github.com/Hjkku/basebot/network/members"><img title="Forks" src="https://img.shields.io/github/forks/Hjkku/basebot?label=Forks&color=blue&style=flat-square"></a>
-<a href="https://github.com/Hjkku/basebot/stargazers"><img title="Stars" src="https://img.shields.io/github/stars/Hjkku/basebot?label=Stars&color=yellow&style=flat-square"></a>
-<a href="https://github.com/Hjkku/basebot/issues"><img title="Issues" src="https://img.shields.io/github/issues/Hjkku/basebot?label=Issues&color=success&style=flat-square"></a>
-<a href="https://github.com/Hjkku/basebot/issues?q=is%3Aissue+is%3Aclosed"><img title="Issues" src="https://img.shields.io/github/issues-closed/Hjkku/basebot?label=Issues&color=red&style=flat-square"></a>
-<a href="https://github.com/Hjkku/basebot/pulls"><img title="Pull Request" src="https://img.shields.io/github/issues-pr/Hjkku/basebot?label=PullRequest&color=success&style=flat-square"></a>
-<a href="https://github.com/Hjkku/basebot/pulls?q=is%3Apr+is%3Aclosed"><img title="Pull Request" src="https://img.shields.io/github/issues-pr-closed/Hjkku/basebot?label=PullRequest&color=red&style=flat-square"></a>
+
+# 🤖 AXMISU BOT — Baileys Edition
+
+**Base bot WhatsApp gratis, ringan, dan gampang dikembangin — dibangun di atas [Baileys](https://github.com/WhiskeySockets/Baileys) (WhiskeySockets).**
+
+<p>
+  <a href="https://github.com/Hjkku/basebot/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/Hjkku/basebot?label=Stars&color=yellow&style=flat-square"></a>
+  <a href="https://github.com/Hjkku/basebot/network/members"><img alt="Forks" src="https://img.shields.io/github/forks/Hjkku/basebot?label=Forks&color=blue&style=flat-square"></a>
+  <a href="https://github.com/Hjkku/basebot/issues"><img alt="Open Issues" src="https://img.shields.io/github/issues/Hjkku/basebot?label=Issues&color=success&style=flat-square"></a>
+  <a href="https://github.com/Hjkku/basebot/pulls"><img alt="Pull Requests" src="https://img.shields.io/github/issues-pr/Hjkku/basebot?label=Pull%20Requests&color=success&style=flat-square"></a>
+  <img alt="Node" src="https://img.shields.io/badge/node-%3E%3D18.0.0-339933?style=flat-square&logo=node.js&logoColor=white">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-informational?style=flat-square">
+</p>
+
+<p>
+  <a href="https://axmisu.biz.id/grup"><img alt="WhatsApp Group" src="https://img.shields.io/badge/WhatsApp%20Group-25D366?style=for-the-badge&logo=whatsapp&logoColor=white"></a>
+  <a href="https://axmisu.biz.id"><img alt="Website" src="https://img.shields.io/badge/Website-axmisu.biz.id-6C5CE7?style=for-the-badge&logo=googlechrome&logoColor=white"></a>
+</p>
+
 </div>
 
-Base bot WhatsApp gratis dibuat oleh [Axmisu](https://axmisu.biz.id) menggunakan Node.js dan library [WhiskeySocket/Baileys](https://github.com/WhiskeySockets/Baileys). Base ini dibuat **simple** supaya gampang dipelajari dan dikembangin sendiri. ~ By Axmisu
+---
 
-#### Join Group
-[![Grup WhatsApp](https://img.shields.io/badge/WhatsApp%20Group-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://axmisu.biz.id/grup)
+## 📖 Daftar Isi
+
+- [Tentang](#-tentang)
+- [Fitur](#-fitur)
+- [Requirements](#-requirements)
+- [Instalasi](#-instalasi)
+- [Menjalankan Bot](#️-menjalankan-bot)
+- [Konfigurasi](#️-konfigurasi)
+- [Keamanan — Wajib Baca](#-keamanan--wajib-dibaca-sebelum-publish)
+- [Menambah Command](#-menambah-command-baru)
+- [Struktur Project](#-struktur-project)
+- [Daftar Command](#-daftar-command)
+- [Kredit](#-kredit)
 
 ---
+
+## 📝 Tentang
+
+Base bot WhatsApp gratis dibuat oleh **[Axmisu](https://axmisu.biz.id)** menggunakan Node.js dan library [**Baileys**](https://github.com/WhiskeySockets/Baileys) (docs: [baileys.wiki](https://baileys.wiki)). Base ini sengaja dibuat **simple & minim dependency** supaya gampang dipelajari, di-otak-atik, dan dikembangin jadi bot sendiri.
+
+> 💚 **Gratis & open.** Base ini bebas dipakai, dimodif, dan disebarluaskan — cuma nggak boleh dijual-belikan.
+
+---
+
+## ✨ Fitur
+
+| Kategori | Status | Keterangan |
+|---|:---:|---|
+| Koneksi & auto-reconnect | ✅ | Auto reconnect kalau koneksi putus, kecuali logout manual |
+| Mode Public / Self | ✅ | Bisa dibatasi cuma owner yang bisa pakai bot |
+| Sticker maker | ✅ | Gambar, video, dan GIF → stiker WebP + EXIF pack |
+| Brat sticker | ✅ | Bikin stiker teks ala "brat" |
+| TikTok downloader | ✅ | Download video/foto TikTok tanpa watermark |
+| Plugin auto-reload | ✅ | Tambah/edit file di `plugin/` langsung ke-load tanpa restart |
+| Owner eval & shell access | ⚙️ Opt-in | **Off by default** — lihat bagian [Keamanan](#-keamanan--wajib-dibaca-sebelum-publish) |
+
+---
+
 ## 📦 Requirements
 
-Minimum requirements:
-- **Node.js** v18 or higher
-- **Git**
-
-System dependencies (perlu diinstall manual):
-- ffmpeg
-- git
+| Requirement | Versi Minimum |
+|---|---|
+| Node.js | `>= 18.0.0` |
+| Git | terbaru |
+| ffmpeg | terbaru (untuk sticker video/gif) |
 
 ---
-## 🚀 Installation
-### 1️⃣ Clone / Extract Project
+
+## 🚀 Instalasi
+
+### 1. Clone project
+
 ```bash
 git clone https://github.com/Hjkku/basebot
 cd basebot
 ```
----
-## 📱 Termux (Android)
+
+### 2A. 📱 Termux (Android)
+
 ```bash
 pkg update && pkg upgrade
-pkg install git
-pkg install nodejs
-pkg install ffmpeg
+pkg install git nodejs ffmpeg
 git clone https://github.com/Hjkku/basebot
 cd basebot
 npm install
 npm start
 ```
 
----
-## 💻 Laptop / Ubuntu / VPS / SSH
-* Download And Install Git [`Click Here`](https://git-scm.com/downloads)
-* Download And Install NodeJS [`Click Here`](https://nodejs.org/en/download)
-* Download And Install FFmpeg [`Click Here`](https://ffmpeg.org/download.html) (**Don't Forget Add FFmpeg to PATH environment variables**)
+### 2B. 💻 Laptop / Ubuntu / VPS
+
+1. Install [Git](https://git-scm.com/downloads)
+2. Install [Node.js](https://nodejs.org/en/download)
+3. Install [FFmpeg](https://ffmpeg.org/download.html) — **jangan lupa masukin ke PATH environment variable**
 
 ```bash
 npm install
@@ -58,58 +102,56 @@ npm start
 ```
 
 ---
-## ▶️ Running the Bot
+
+## ▶️ Menjalankan Bot
 
 ```bash
 npm start
 ```
 
-Scan the QR Code atau pakai Pairing Code, lalu bot siap dipakai.
+Scan **QR Code** yang muncul di terminal, atau pakai **Pairing Code** (atur di `settings.js`) — bot langsung siap dipakai setelah terhubung.
 
 ---
-## ⚙️ Bot Configuration
 
-Semua konfigurasi utama ada di:
+## ⚙️ Konfigurasi
 
-📁 **[settings.js](./settings.js)**
+Semua pengaturan utama ada di **[`settings.js`](./settings.js)**.
 
-### Editable Settings
+| Setting | Contoh | Keterangan |
+|---|---|---|
+| `global.owner` | `['628xxxxxxxxxx']` | Nomor owner bot, bisa lebih dari satu |
+| `global.botname` | `'AXMISU BOT'` | Nama bot |
+| `global.packname` / `global.author` | `'AXMISU'` | Metadata pack stiker |
+| `global.prefix` | `['.']` | Prefix command, boleh lebih dari satu |
+| `global.pairing_code` | `true` / `false` | `true` = login pakai kode, `false` = scan QR |
+| `global.number_bot` | `'628xxxxxxxxxx'` | Nomor bot (isi kalau pakai pairing code) |
+| `global.enableShellExec` | `false` | Nyalain fitur `$<perintah>` — **lihat bagian Keamanan** |
+| `global.enableEval` | `false` | Nyalain command `.run` / `.eval` — **lihat bagian Keamanan** |
 
-#### Owner Number
-```js
-global.owner = ['628xxxxxxxxxx']
-```
-
-#### Bot Identity
-```js
-global.botname = 'AXMISU BOT'
-global.packname = 'AXMISU'
-global.author = 'AXMISU'
-```
-
-#### Command Prefix
-```js
-global.prefix = ['.']
-```
-
-#### Pairing Code / Bot Number
-```js
-global.pairing_code = true
-global.number_bot = '628xxxxxxxxxx'
-```
-
-> Mode bot (public/self) disimpan di database SQLite (`database/database.db`), jadi settingannya tetap kesimpen meski bot restart.
+> 💾 Mode bot (Public/Self) disimpan otomatis di SQLite (`database/database.db`), jadi tetap tersimpan meski bot restart.
 
 ---
-## 🧩 Editing & Adding Features
 
-Semua command bot ada di folder:
+## 🔐 Keamanan — Wajib Dibaca Sebelum Publish
 
-📁 **[plugin/](./plugin)**
+Base ini punya dua command tingkat lanjut yang bisa mengakses server tempat bot jalan secara **penuh**:
 
-### Cara Nambah Command Baru
+| Fitur | Toggle | Risiko |
+|---|---|---|
+| `$<perintah>` (shell) | `global.enableShellExec` | Menjalankan perintah shell/OS apapun di server |
+| `.run` / `.eval` | `global.enableEval` | Menjalankan kode JavaScript apapun dengan akses penuh ke proses bot |
 
-Tinggal bikin file `.js` baru di folder `plugin/`, contoh `plugin/ping.js`:
+Keduanya **dimatikan secara default** dan cuma bisa dipicu oleh nomor yang ada di `global.owner`. Kalau kamu berniat **membagikan/mempublikasikan bot ini ke orang lain**:
+
+- ✅ Jangan nyalain `enableShellExec` / `enableEval` kecuali kamu benar-benar butuh dan paham risikonya.
+- ✅ Pastikan `global.owner` cuma berisi nomor kamu sendiri, dan device WhatsApp-nya aman (tidak dipakai bersama).
+- ❌ Jangan pernah bagikan session/kredensial login bot ke orang lain — itu setara memberi akses penuh ke akun WhatsApp tersebut.
+
+---
+
+## 🧩 Menambah Command Baru
+
+Semua command ada di folder **[`plugin/`](./plugin)**. Tinggal bikin file `.js` baru, contoh `plugin/ping.js`:
 
 ```js
 const handler = async (axmisu, m) => {
@@ -120,43 +162,38 @@ handler.command = ['ping'];
 export default handler;
 ```
 
-Guidelines:
+**Guidelines:**
 - Satu file plugin = satu command (atau grup alias command)
-- Wajib export default function dan set `handler.command`
-- Ga perlu restart bot — plugin baru otomatis ke-load (lihat `src/message.js`)
+- Wajib `export default` function dan set `handler.command`
+- Nggak perlu restart bot — plugin baru otomatis ke-load (lihat `src/message.js`)
+
+### Alur Inti Bot
+
+| File | Tanggung Jawab |
+|---|---|
+| 📁 [`lib/connection.js`](./lib/connection.js) | Koneksi Baileys, login, auto-reconnect |
+| 📁 [`src/message.js`](./src/message.js) | Serialize pesan, plugin loader, command dispatcher |
+
+> ⚠️ Edit dua file di atas tidak disarankan kecuali kamu sudah paham alur kerja bot-nya.
 
 ---
-## 🔌 Connector & Core Handler
 
-Buat paham alur koneksi WhatsApp dan penanganan pesan, lihat:
+## 🗂 Struktur Project
 
-📁 **[lib/connection.js](./lib/connection.js)** — koneksi Baileys, login, reconnect
-📁 **[src/message.js](./src/message.js)** — serializer pesan, plugin loader, dispatcher command
-
-File ini bertanggung jawab untuk:
-- Inisialisasi koneksi Baileys
-- Handle event WhatsApp (pesan masuk, koneksi update)
-- Load [settings.js](./settings.js)
-- Meneruskan pesan ke plugin yang cocok di folder `plugin/`
-
-⚠️ **Edit `lib/connection.js` dan `src/message.js` tidak disarankan kecuali kamu paham alur bot-nya.**
-
----
-## 🗂 Structure Project
-```
+```text
 ├── README.md
 ├── .gitignore
 ├── index.js
 ├── settings.js
 ├── function.js
 ├── package.json
-├── lib
+├── lib/
 │   ├── connection.js
 │   ├── database.js
 │   └── startup.js
-├── src
+├── src/
 │   └── message.js
-├── plugin
+├── plugin/
 │   ├── menu.js
 │   ├── self.js
 │   ├── public.js
@@ -164,44 +201,37 @@ File ini bertanggung jawab untuk:
 │   ├── sticker.js
 │   ├── tiktok.js
 │   └── run.js
-└── database
+└── database/
     └── database.db
 ```
 
 ---
-### Features
-| Menu     | Bot | Stiker | Download | Owner |
-| -------- | --- | ------ | -------- | ----- |
-| Work     |  ✅  |   ✅   |    ✅    |   ✅   |
 
-### Daftar Command
+## 📋 Daftar Command
 
-| Command   | Keterangan                                          |
-|-----------|------------------------------------------------------|
-| `.menu`   | Tampilkan daftar command                              |
-| `.self`   | (owner) Bot cuma respon owner                         |
-| `.public` | (owner) Bot respon semua orang                        |
-| `.brat`   | Bikin stiker teks ala "brat"                          |
-| `.s`      | Ubah gambar/video/gif jadi stiker                     |
-| `.tt`     | Download video TikTok                                 |
-| `.run`    | (owner) Eval kode JS ke bot, cth: `.run m.reply('hi')` |
-| `$<cmd>`  | (owner) Jalanin perintah terminal/shell, cth: `$ls -la` |
-
-License: [MIT](https://choosealicense.com/licenses/mit/)
-
-#### Support Me
-- [Axmisu](https://axmisu.biz.id)
-
-## Contributor
-
-- [Axmisu](https://axmisu.biz.id) (Pembuat)
-
-## Thanks to
-
-<div align="center">
-<img src="https://axmisu.biz.id/axmisu.png" width="100" alt="Axmisu">
-</div>
+| Command | Akses | Keterangan |
+|---|:---:|---|
+| `.menu` | Semua | Tampilkan daftar command |
+| `.self` | Owner | Bot cuma respon owner |
+| `.public` | Owner | Bot respon semua orang |
+| `.brat` | Semua | Bikin stiker teks ala "brat" |
+| `.s` | Semua | Ubah gambar/video/gif jadi stiker |
+| `.tt` | Semua | Download video TikTok |
+| `.run` | Owner 🔒 | Eval kode JS — nonaktif sampai `enableEval: true` |
+| `$<perintah>` | Owner 🔒 | Shell/terminal — nonaktif sampai `enableShellExec: true` |
 
 ---
-BASE BOT WA BY AXMISU
-BASE INI GRATIS! TIDAK UNTUK DIPERJUALKAN BELIKAN! KALIAN BEBAS OTAK ATIK BASE INI.
+
+## 🙌 Kredit
+
+<div align="center">
+
+**License:** [MIT](https://choosealicense.com/licenses/mit/)
+
+Dibuat dengan ❤️ oleh **[Axmisu](https://axmisu.biz.id)**
+
+<img src="https://axmisu.biz.id/axmisu.png" width="90" alt="Axmisu">
+
+*BASE BOT WA BY AXMISU — GRATIS, TIDAK UNTUK DIPERJUALBELIKAN. BEBAS DI-OTAK-ATIK.*
+
+</div>
