@@ -1,13 +1,13 @@
 ## Information
 
 <div align="center">
-<a href="https://github.com/axmisu/basebot/watchers"><img title="Watchers" src="https://img.shields.io/github/watchers/axmisu/basebot?label=Watchers&color=green&style=flat-square"></a>
-<a href="https://github.com/axmisu/basebot/network/members"><img title="Forks" src="https://img.shields.io/github/forks/axmisu/basebot?label=Forks&color=blue&style=flat-square"></a>
-<a href="https://github.com/axmisu/basebot/stargazers"><img title="Stars" src="https://img.shields.io/github/stars/axmisu/basebot?label=Stars&color=yellow&style=flat-square"></a>
-<a href="https://github.com/axmisu/basebot/issues"><img title="Issues" src="https://img.shields.io/github/issues/axmisu/basebot?label=Issues&color=success&style=flat-square"></a>
-<a href="https://github.com/axmisu/basebot/issues?q=is%3Aissue+is%3Aclosed"><img title="Issues" src="https://img.shields.io/github/issues-closed/axmisu/basebot?label=Issues&color=red&style=flat-square"></a>
-<a href="https://github.com/axmisu/basebot/pulls"><img title="Pull Request" src="https://img.shields.io/github/issues-pr/axmisu/basebot?label=PullRequest&color=success&style=flat-square"></a>
-<a href="https://github.com/axmisu/basebot/pulls?q=is%3Apr+is%3Aclosed"><img title="Pull Request" src="https://img.shields.io/github/issues-pr-closed/axmisu/basebot?label=PullRequest&color=red&style=flat-square"></a>
+<a href="https://github.com/Hjkku/basebot/watchers"><img title="Watchers" src="https://img.shields.io/github/watchers/Hjkku/basebot?label=Watchers&color=green&style=flat-square"></a>
+<a href="https://github.com/Hjkku/basebot/network/members"><img title="Forks" src="https://img.shields.io/github/forks/Hjkku/basebot?label=Forks&color=blue&style=flat-square"></a>
+<a href="https://github.com/Hjkku/basebot/stargazers"><img title="Stars" src="https://img.shields.io/github/stars/Hjkku/basebot?label=Stars&color=yellow&style=flat-square"></a>
+<a href="https://github.com/Hjkku/basebot/issues"><img title="Issues" src="https://img.shields.io/github/issues/Hjkku/basebot?label=Issues&color=success&style=flat-square"></a>
+<a href="https://github.com/Hjkku/basebot/issues?q=is%3Aissue+is%3Aclosed"><img title="Issues" src="https://img.shields.io/github/issues-closed/Hjkku/basebot?label=Issues&color=red&style=flat-square"></a>
+<a href="https://github.com/Hjkku/basebot/pulls"><img title="Pull Request" src="https://img.shields.io/github/issues-pr/Hjkku/basebot?label=PullRequest&color=success&style=flat-square"></a>
+<a href="https://github.com/Hjkku/basebot/pulls?q=is%3Apr+is%3Aclosed"><img title="Pull Request" src="https://img.shields.io/github/issues-pr-closed/Hjkku/basebot?label=PullRequest&color=red&style=flat-square"></a>
 </div>
 
 Base bot WhatsApp gratis dibuat oleh [Axmisu](https://axmisu.biz.id) menggunakan Node.js dan library [WhiskeySocket/Baileys](https://github.com/WhiskeySockets/Baileys). Base ini dibuat **simple** supaya gampang dipelajari dan dikembangin sendiri. ~ By Axmisu
@@ -30,7 +30,7 @@ System dependencies (perlu diinstall manual):
 ## 🚀 Installation
 ### 1️⃣ Clone / Extract Project
 ```bash
-git clone https://github.com/axmisu/basebot
+git clone https://github.com/Hjkku/basebot
 cd basebot
 ```
 ---
@@ -40,7 +40,7 @@ pkg update && pkg upgrade
 pkg install git
 pkg install nodejs
 pkg install ffmpeg
-git clone https://github.com/axmisu/basebot
+git clone https://github.com/Hjkku/basebot
 cd basebot
 npm install
 npm start
