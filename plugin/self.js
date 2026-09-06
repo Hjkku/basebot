@@ -1,7 +1,7 @@
 import { saveDatabase } from '../lib/database.js';
 
 const handler = async (axmisu, m, { isOwner }) => {
-  if (!isOwner) return m.reply('❌ Command ini khusus owner!');
+  if (!isOwner) return m.reply(global.mess.owner);
 
   global.db.botPublic = false;
   saveDatabase();

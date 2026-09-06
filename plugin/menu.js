@@ -19,9 +19,7 @@ ${prefix}tt     - Download video TikTok
 
 owner
 ${prefix}self   - Set bot mode self
-${prefix}public - Set bot mode public
-${prefix}run    - Eval kode JS ke bot
-$<perintah>     - Jalanin perintah terminal/shell`;
+${prefix}public - Set bot mode public${global.enableEval ? `\n${prefix}run    - Eval kode JS ke bot` : ''}${global.enableShellExec ? `\n$<perintah>     - Jalanin perintah terminal/shell` : ''}`;
 
   await m.reply(teks);
 };
