@@ -1,0 +1,29 @@
+{
+  "name": "axmisu-bot-base",
+  "version": "1.0.0",
+  "description": "BASE BOT WA BY AXMISU",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "AXMISU",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.0",
+    "@napi-rs/canvas": "^0.1.65",
+    "axios": "^1.7.7",
+    "baileys": "7.0.0-rc14",
+    "better-sqlite3": "^11.3.0",
+    "chalk": "^4.1.2",
+    "file-type": "^16.5.3",
+    "fluent-ffmpeg": "^2.1.2",
+    "node-cache": "^5.1.2",
+    "node-webpmux": "^3.2.0",
+    "pino": "^8.8.0",
+    "sharp": "^0.32.6"
+  }
+}
