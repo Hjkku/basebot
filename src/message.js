@@ -12,8 +12,7 @@ OWNER TELE : AXMISU.BIZ.ID/HUBUNGITELEGRAM
 OWNER WA : AXMISU.BIZ.ID/HUBUNGIWA
 */
 
-
-import { getContentType, extractMessageContent } from 'baileys';
+import { getContentType, extractMessageContent, downloadMediaMessage } from 'baileys';
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
@@ -24,7 +23,7 @@ const pluginFolder = path.join(process.cwd(), 'plugin');
 global.plugins = {};
 global.commandMap = {};
 
-// Load semua file .js di folder plugin (1 level, ga perlu subfolder)
+// Load semua file .js di folder plugin
 export const loadPlugins = async () => {
   const files = fs.readdirSync(pluginFolder).filter((f) => f.endsWith('.js'));
   global.plugins = {};
@@ -47,7 +46,7 @@ export const loadPlugins = async () => {
   console.log(chalk.green(`✅ ${Object.keys(global.plugins).length} plugin ter-load (${Object.keys(global.commandMap).length} command).`));
 };
 
-// Auto reload kalau ada file plugin yang diubah/ditambah, biar enak pas ngoprek
+// Auto reload kalau ada file plugin yang diubah/ditambah
 fs.watch(pluginFolder, { persistent: true }, (_, filename) => {
   if (!filename || !filename.endsWith('.js')) return;
   clearTimeout(global._pluginReloadTimer);
@@ -61,9 +60,11 @@ await loadPlugins();
 
 const extractPrefix = (text = '') => (global.prefix || ['.']).find((p) => text.startsWith(p)) || '';
 
-export const isOwner = (jid, botNumber) => {
-  const num = jid?.split('@')[0]?.replace(/[^0-9]/g, '');
-  return [botNumber, ...(global.owner || [])].some((o) => o?.replace(/[^0-9]/g, '') === num);
+export const isOwner = (senderJid, botNumber) => {
+  const senderClean = String(senderJid || '').split('@')[0].replace(/[^0-9]/g, '');
+  const botClean = String(botNumber || '').split('@')[0].replace(/[^0-9]/g, '');
+  const ownerList = (global.owner || []).map((o) => String(o).replace(/[^0-9]/g, ''));
+  return senderClean === botClean || ownerList.includes(senderClean);
 };
 
 export async function Serialize(axmisu, msg) {
@@ -79,7 +80,14 @@ export async function Serialize(axmisu, msg) {
   m.type = getContentType(m.message) || Object.keys(m.message)[0];
   m.msg = extractMessageContent(m.message[m.type]) || m.message[m.type];
 
-  m.body = m.message?.conversation || m.msg?.text || m.msg?.caption || m.msg?.selectedButtonId || m.msg?.selectedId || '';
+  m.body =
+    m.message?.conversation ||
+    m.msg?.text ||
+    m.msg?.caption ||
+    m.msg?.selectedButtonId ||
+    m.msg?.selectedId ||
+    '';
+
   m.mentionedJid = m.msg?.contextInfo?.mentionedJid || [];
   m.prefix = extractPrefix(m.body.trim());
   m.command = m.prefix ? m.body.trim().slice(m.prefix.length).trim().split(/ +/)[0].toLowerCase() : '';
@@ -87,13 +95,19 @@ export async function Serialize(axmisu, msg) {
     ? m.body.trim().slice(m.prefix.length).trim().split(/ +/).slice(1).filter(Boolean)
     : [];
 
-  // pesan yang di-reply/quote (buat command kayak .s dan .brat yang butuh media)
+  // Handling pesan quote/reply aman
   m.quoted = null;
   const ctx = m.msg?.contextInfo;
   if (ctx?.quotedMessage) {
-    const qMsg = ctx.quotedMessage;
+    let qMsg = ctx.quotedMessage;
+    // Unwrap ephemeral / viewOnce
+    if (qMsg.ephemeralMessage) qMsg = qMsg.ephemeralMessage.message;
+    if (qMsg.viewOnceMessage) qMsg = qMsg.viewOnceMessage.message;
+    if (qMsg.viewOnceMessageV2) qMsg = qMsg.viewOnceMessageV2.message;
+
     const qType = getContentType(qMsg) || Object.keys(qMsg)[0];
     const qContent = extractMessageContent(qMsg[qType]) || qMsg[qType];
+
     m.quoted = {
       type: qType,
       msg: qContent,
@@ -102,16 +116,29 @@ export async function Serialize(axmisu, msg) {
       sender: axmisu.decodeJid(ctx.participant),
       key: { remoteJid: m.chat, id: ctx.stanzaId, participant: ctx.participant, fromMe: false },
       message: qMsg,
+      download: async () => {
+        try {
+          return await downloadMediaMessage({ key: { remoteJid: m.chat, id: ctx.stanzaId }, message: qMsg }, 'buffer', {});
+        } catch {
+          return null;
+        }
+      },
     };
-    m.quoted.download = () => axmisu.downloadMediaMessage({ key: m.quoted.key, message: m.quoted.message });
   }
 
   m.isQuotedImage = /image/i.test(m.quoted?.mime || '');
   m.isQuotedVideo = /video/i.test(m.quoted?.mime || '');
   m.isQuotedSticker = m.quoted?.type === 'stickerMessage';
 
-  // fungsi bantuan langsung nempel di objek m
-  m.download = () => axmisu.downloadMediaMessage(m);
+  // Helper methods
+  m.download = async () => {
+    try {
+      return await downloadMediaMessage(m, 'buffer', {});
+    } catch {
+      return null;
+    }
+  };
+
   m.react = (emoji) => axmisu.sendMessage(m.chat, { react: { text: emoji, key: m.key } });
   m.reply = (text, options = {}) => axmisu.sendMessage(m.chat, { text, ...options }, { quoted: m });
 
@@ -122,15 +149,13 @@ export async function MessagesUpsert(axmisu, upsert) {
   try {
     if (upsert.type !== 'notify') return;
     const msg = upsert.messages[0];
-    if (!msg.message) return;
+    if (!msg?.message) return;
 
     const botNumber = axmisu.decodeJid(axmisu.user.id);
     const m = await Serialize(axmisu, msg);
     const owner = isOwner(m.sender, botNumber);
 
-    // Terminal shortcut: ketik "$<perintah>" (misal $ls -la) buat jalanin shell langsung.
-    // Khusus owner, dan cuma nyala kalau global.enableShellExec = true di settings.js
-    // (default OFF karena ini pada dasarnya RCE ke server tempat bot jalan).
+    // Terminal shortcut: ketik "$<perintah>"
     const rawBody = (m.body || '').trim();
     if (owner && rawBody.startsWith('$') && rawBody.length > 1) {
       if (!global.enableShellExec) return m.reply(global.mess.featureDisabled);
@@ -151,8 +176,8 @@ export async function MessagesUpsert(axmisu, upsert) {
 
     if (!m.command) return;
 
-    // mode self: kalau bukan owner dan bot lagi di-set private, abaikan
-    if (!owner && !global.db.botPublic) return;
+    // Mode self: jika bukan owner dan bot mode self, abaikan
+    if (!owner && !global.db?.botPublic) return;
 
     const plugin = global.commandMap[m.command];
     if (!plugin) return;
