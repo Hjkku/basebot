@@ -1,6 +1,6 @@
 <div align="center">
 
-# AXMISU BOT — Baileys Edition
+# 🤖 AXMISU BOT — Baileys Edition
 
 **Base bot WhatsApp gratis, ringan, dan gampang dikembangin — dibangun di atas [Baileys](https://github.com/WhiskeySockets/Baileys) (WhiskeySockets).**
 

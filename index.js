@@ -31,8 +31,8 @@ function start() {
     })
     .on('exit', (code) => {
       if (code !== 0) {
-        console.error(chalk.red.bold(`[BOT] Keluar dengan kode: ${code}, mencoba restart...`));
-        start();
+        console.error(chalk.red.bold(`[BOT] Keluar dengan kode: ${code}, mencoba restart dalam 3 detik...`));
+        setTimeout(start, 3000);
       } else {
         console.log(chalk.green.bold('[BOT] Proses berhenti. Sampai jumpa!'));
         process.exit(0);

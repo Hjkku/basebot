@@ -1,7 +1,7 @@
 {
   "name": "axmisu-bot-base",
-  "version": "1.0.0",
-  "description": "BASE BOT WA BY AXMISU",
+  "version": "1.0.1",
+  "description": "BASE BOT WA BY AXMISU - STABLE & CLEAN",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -17,7 +17,6 @@
     "@napi-rs/canvas": "^0.1.65",
     "axios": "^1.7.7",
     "baileys": "7.0.0-rc14",
-    "better-sqlite3": "^11.3.0",
     "chalk": "^4.1.2",
     "file-type": "^16.5.3",
     "fluent-ffmpeg": "^2.1.2",
