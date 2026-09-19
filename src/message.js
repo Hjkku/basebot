@@ -1,0 +1,187 @@
+/* BASE BOT WA BY AXMISU 
+BASE INI GRATIS! TIDAK UNTUK DIPERJUALKAN BELIKAN! KALIAN BEBAS OTAK ATIK BASE INI. 
+
+AUTHOR : AXMISU
+
+promosi dikit :v. kalian butuh panel? kunjungi
+WEBSITE : AXMISU.BIZ.ID
+
+KOMUNITAS : AXMISU.BIZ.ID/GRUP
+SALURAN : AXMISU.BIZ.ID/SALURAN
+OWNER TELE : AXMISU.BIZ.ID/HUBUNGITELEGRAM
+OWNER WA : AXMISU.BIZ.ID/HUBUNGIWA
+*/
+
+import { getContentType, extractMessageContent, downloadMediaMessage } from 'axleys';
+import fs from 'fs';
+import path from 'path';
+import chalk from 'chalk';
+import { pathToFileURL } from 'url';
+import { execShell } from '../function.js';
+
+const pluginFolder = path.join(process.cwd(), 'plugin');
+global.plugins = {};
+global.commandMap = {};
+
+// Load semua file .js di folder plugin
+export const loadPlugins = async () => {
+  const files = fs.readdirSync(pluginFolder).filter((f) => f.endsWith('.js'));
+  global.plugins = {};
+  global.commandMap = {};
+
+  for (const file of files) {
+    try {
+      const filePath = path.join(pluginFolder, file);
+      const mod = await import(`${pathToFileURL(filePath).href}?update=${Date.now()}`);
+      const plugin = mod.default;
+      if (typeof plugin !== 'function' || !plugin.command) continue;
+
+      global.plugins[file] = plugin;
+      const cmds = Array.isArray(plugin.command) ? plugin.command : [plugin.command];
+      cmds.forEach((c) => (global.commandMap[String(c).toLowerCase()] = plugin));
+    } catch (e) {
+      console.error(chalk.red(`❌ Gagal load plugin ${file}:`), e.message);
+    }
+  }
+  console.log(chalk.green(`✅ ${Object.keys(global.plugins).length} plugin ter-load (${Object.keys(global.commandMap).length} command).`));
+};
+
+// Auto reload kalau ada file plugin yang diubah/ditambah
+fs.watch(pluginFolder, { persistent: true }, (_, filename) => {
+  if (!filename || !filename.endsWith('.js')) return;
+  clearTimeout(global._pluginReloadTimer);
+  global._pluginReloadTimer = setTimeout(() => {
+    console.log(chalk.cyan(`♻️  Perubahan terdeteksi di plugin/${filename}, reload...`));
+    loadPlugins();
+  }, 300);
+});
+
+await loadPlugins();
+
+const extractPrefix = (text = '') => (global.prefix || ['.']).find((p) => text.startsWith(p)) || '';
+
+export const isOwner = (senderJid, botNumber) => {
+  const senderClean = String(senderJid || '').split('@')[0].replace(/[^0-9]/g, '');
+  const botClean = String(botNumber || '').split('@')[0].replace(/[^0-9]/g, '');
+  const ownerList = (global.owner || []).map((o) => String(o).replace(/[^0-9]/g, ''));
+  return senderClean === botClean || ownerList.includes(senderClean);
+};
+
+export async function Serialize(axmisu, msg) {
+  const m = { ...msg };
+  if (!m.key || !m.message) return m;
+
+  m.id = m.key.id;
+  m.chat = m.key.remoteJid;
+  m.isGroup = m.chat.endsWith('@g.us');
+  m.sender = axmisu.decodeJid((m.key.fromMe && axmisu.user.id) || m.key.participant || m.chat);
+  m.pushName = m.pushName || 'User';
+
+  m.type = getContentType(m.message) || Object.keys(m.message)[0];
+  m.msg = extractMessageContent(m.message[m.type]) || m.message[m.type];
+
+  m.body =
+    m.message?.conversation ||
+    m.msg?.text ||
+    m.msg?.caption ||
+    m.msg?.selectedButtonId ||
+    m.msg?.selectedId ||
+    '';
+
+  m.mentionedJid = m.msg?.contextInfo?.mentionedJid || [];
+  m.prefix = extractPrefix(m.body.trim());
+  m.command = m.prefix ? m.body.trim().slice(m.prefix.length).trim().split(/ +/)[0].toLowerCase() : '';
+  m.args = m.prefix
+    ? m.body.trim().slice(m.prefix.length).trim().split(/ +/).slice(1).filter(Boolean)
+    : [];
+
+  // Handling pesan quote/reply aman
+  m.quoted = null;
+  const ctx = m.msg?.contextInfo;
+  if (ctx?.quotedMessage) {
+    let qMsg = ctx.quotedMessage;
+    // Unwrap ephemeral / viewOnce
+    if (qMsg.ephemeralMessage) qMsg = qMsg.ephemeralMessage.message;
+    if (qMsg.viewOnceMessage) qMsg = qMsg.viewOnceMessage.message;
+    if (qMsg.viewOnceMessageV2) qMsg = qMsg.viewOnceMessageV2.message;
+
+    const qType = getContentType(qMsg) || Object.keys(qMsg)[0];
+    const qContent = extractMessageContent(qMsg[qType]) || qMsg[qType];
+
+    m.quoted = {
+      type: qType,
+      msg: qContent,
+      mime: qContent?.mimetype || '',
+      body: qMsg?.conversation || qContent?.text || qContent?.caption || '',
+      sender: axmisu.decodeJid(ctx.participant),
+      key: { remoteJid: m.chat, id: ctx.stanzaId, participant: ctx.participant, fromMe: false },
+      message: qMsg,
+      download: async () => {
+        try {
+          return await downloadMediaMessage({ key: { remoteJid: m.chat, id: ctx.stanzaId }, message: qMsg }, 'buffer', {});
+        } catch {
+          return null;
+        }
+      },
+    };
+  }
+
+  m.isQuotedImage = /image/i.test(m.quoted?.mime || '');
+  m.isQuotedVideo = /video/i.test(m.quoted?.mime || '');
+  m.isQuotedSticker = m.quoted?.type === 'stickerMessage';
+
+  // Helper methods
+  m.download = async () => {
+    try {
+      return await downloadMediaMessage(m, 'buffer', {});
+    } catch {
+      return null;
+    }
+  };
+
+  m.react = (emoji) => axmisu.sendMessage(m.chat, { react: { text: emoji, key: m.key } });
+  m.reply = (text, options = {}) => axmisu.sendMessage(m.chat, { text, ...options }, { quoted: m });
+
+  return m;
+}
+
+export async function MessagesUpsert(axmisu, upsert) {
+  try {
+    if (upsert.type !== 'notify') return;
+    const msg = upsert.messages[0];
+    if (!msg?.message) return;
+
+    const botNumber = axmisu.decodeJid(axmisu.user.id);
+    const m = await Serialize(axmisu, msg);
+    const owner = isOwner(m.sender, botNumber);
+
+    // Terminal shortcut: ketik "$<perintah>"
+    const rawBody = (m.body || '').trim();
+    if (owner && rawBody.startsWith('$') && rawBody.length > 1) {
+      if (!global.enableShellExec) return m.reply(global.mess.featureDisabled);
+      const cmd = rawBody.slice(1).trim();
+      if (!cmd) return;
+
+      console.log(chalk.cyan('[TERMINAL]'), cmd);
+      const out = await execShell(cmd);
+      return m.reply(out || '(tidak ada output)');
+    }
+
+    if (!m.body || !m.command) return;
+
+    const isPublic = global.db.getBotMode();
+    if (!isPublic && !owner) return;
+
+    const plugin = global.commandMap[m.command];
+    if (!plugin) return;
+
+    if (plugin.owner && !owner) return m.reply(global.mess.ownerOnly);
+    if (plugin.group && !m.isGroup) return m.reply(global.mess.groupOnly);
+    if (plugin.private && m.isGroup) return m.reply(global.mess.privateOnly);
+
+    console.log(chalk.green('[CMD]'), chalk.yellow(m.command), 'dari', chalk.cyan(m.pushName), m.isGroup ? chalk.magenta('(Grup)') : '');
+    await plugin(axmisu, m);
+  } catch (err) {
+    console.error(chalk.red('[ERROR]'), err);
+  }
+}
